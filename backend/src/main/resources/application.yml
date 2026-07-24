@@ -1,0 +1,44 @@
+spring:
+  config:
+    import: optional:classpath:/application-local.yml
+  application:
+    name: devnova-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/devnova
+    username: devnova
+    password: devnovapassword
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+server:
+  port: 8080
+
+# Application Custom Properties
+app:
+  jwt:
+    # 256-bit key for HMAC-SHA256 (base64-encoded string representation of 32+ bytes key)
+    # Using a pre-defined secret key for development, can be configured via environment
+    secret: dGhpcy1pcy1hLXNlY3VyZS1hbmQtc3Ryb25nLXNlY3JldC1rZXktZm9yLWRldm5vdmEtYWktY2xvdWQtaWRlLXN5c3RlbQ==
+    expirationMs: 86400000 # 24 Hours
+  execution:
+    timeoutSeconds: 60
+    tempDir: d:/DevNova AI/backend/temp-execution
+  ai:
+    openai:
+      key: ${OPENROUTER_API_KEY:${OPENAI_API_KEY:your_api_key_here}}
+      model: openai/gpt-4o-mini
+      base-url: https://openrouter.ai/api/v1
