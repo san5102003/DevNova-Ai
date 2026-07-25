@@ -1,0 +1,51 @@
+# Render Infrastructure as Code (Blueprint)
+services:
+  # Spring Boot Backend Web Service
+  - type: web
+    name: devnova-backend
+    env: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    region: singapore
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: devnova-postgres
+          property: connectionString
+      - key: SPRING_DATA_REDIS_HOST
+        fromService:
+          type: redis
+          name: devnova-redis
+          property: host
+      - key: SPRING_DATA_REDIS_PORT
+        fromService:
+          type: redis
+          name: devnova-redis
+          property: port
+      - key: JWT_SECRET
+        generateValue: true
+
+  # Static Site Frontend
+  - type: web
+    name: devnova-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  # Managed PostgreSQL Database
+  - name: devnova-postgres
+    databaseName: devnova
+    user: devnova
+
+  # Managed Redis Cache
+  - name: devnova-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
