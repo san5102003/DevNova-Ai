@@ -1,4 +1,4 @@
-# DevNova AI — Next-Gen Cloud-Native AI IDE & Code Sandbox
+# DevNova AI —  POWERED CODE EDITOR
 
 <p align="center">
   <img src="https://img.shields.io/badge/Java-17-orange.svg?style=for-the-badge&logo=java" alt="Java 17" />
